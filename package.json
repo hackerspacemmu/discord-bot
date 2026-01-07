@@ -1,12 +1,13 @@
 {
   "name": "discord-bot",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "tsx deploy-commands.ts",
-    "start": "tsx index.ts"
+    "deploy": "tsx src/scripts/deploy-commands.ts",
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts"
   },
   "author": "",
   "license": "ISC",

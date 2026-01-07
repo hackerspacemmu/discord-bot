@@ -2,13 +2,13 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { REST, Routes } from 'discord.js'
-import { discordBotToken, discordBotClientId, discordServerId } from './env.js'
+import { discordBotToken, discordBotClientId, discordServerId } from '../config/env.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const commands: any[] = []
-const foldersPath = path.join(__dirname, 'commands')
+const foldersPath = path.join(__dirname, '..', 'commands')
 const commandFolders = fs.readdirSync(foldersPath)
 
 for (const folder of commandFolders) {
@@ -42,3 +42,4 @@ const rest = new REST().setToken(discordBotToken);
         console.error(error)
     }
 })()
+
