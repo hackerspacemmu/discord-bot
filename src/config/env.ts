@@ -9,4 +9,4 @@ export const discordBotOauth2GeneratedUrl = process.env.DISCORD_BOT_OAUTH2_GENER
 export const discordServerId = process.env.DISCORD_SERVER_ID as string
 export const testChannelId = process.env.TEST_CHANNEL_ID as string
 export const port = process.env.PORT || 4000
-export const backendUrl = process.env.BACKEND_URL || `http://localhost:${port}`
+export const backendUrl = process.env.BACKEND_URL || `http://localhost:3000`
