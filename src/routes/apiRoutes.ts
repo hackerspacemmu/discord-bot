@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { sendHiHandler } from '../controllers/testController.js'
 
 const router = Router()
 
-router.get('/test', sendHiHandler)
+router.get('/health', (req, res) => {
+    res.status(200).json({ status: 'OK' })
+})
 
 export default router
 
