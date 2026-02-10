@@ -1,10 +1,9 @@
 import { backendUrl } from "config/env.js";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { Stats } from "types/stats.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("my-stats")
-    .setDescription("Get your member statistics!")
+    .setName("who")
+    .setDescription("Find out who this person is!")
     .addUserOption(option =>
         option
             .setName("member")
@@ -18,28 +17,28 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     try {
         const response = await fetch(
-            `${backendUrl}/api/v1/discord/fetch-member-stats?discord_tag=${encodeURIComponent(discordTag)}`
+            `${backendUrl}/api/v1/discord/fetch-member-name?discord_tag=${encodeURIComponent(discordTag)}`
         )
 
-        const data: Stats = await response.json();
+        const data = await response.json();
 
         if (!response.ok || !data) {
             await interaction.reply({
-                content: `Could not find statistics for @${discordTag}. Are you sure you are part of hackerspace?`
+                content: `Could not find name for @${discordTag}. Are you sure they are part of hackerspace?`
             });
             return;
         }
 
         await interaction.reply({
             content: 
-            `**${data.stats.name}'s stats**\nTotal Projects: ${data.stats.total_projects}\nCompleted Projects: ${data.stats.completed_projects}\nTotal Updates: ${data.stats.total_updates}`,
+            `**${data.name}** is @${discordTag} in Discord.`,
         })
 
     } catch(error: any) {
         console.error('Error fetching member stats:', error)
         
         await interaction.reply({
-            content: 'There was an error while fetching your member statistics. Please try again later.',
+            content: 'There was an error while fetching the member information. Please try again later.',
         })
     }
 }
