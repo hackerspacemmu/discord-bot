@@ -5,9 +5,18 @@ import { Stats } from "types/stats.js";
 export const data = new SlashCommandBuilder()
     .setName("my-stats")
     .setDescription("Get your member statistics!")
+    .addUserOption(option =>
+        option
+            .setName("member")
+            .setDescription("The member to look up (optional, defaults to yourself)")
+            .setRequired(false)
+    );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-    const discordTag = interaction.user.tag;
+    const targetUser = interaction.options.getUser("member");
+    const discordTag = targetUser?.tag ?? interaction.user.tag;
+
+    console.log(`Fetching stats for Discord tag: ${targetUser}`);
 
     try {
         const response = await fetch(
