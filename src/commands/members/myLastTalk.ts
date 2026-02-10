@@ -12,9 +12,16 @@ interface LastTalk {
 export const data = new SlashCommandBuilder()
     .setName("my-last-talk")
     .setDescription("Get your latest talk given!")
+    .addUserOption(option =>
+        option
+            .setName("member")
+            .setDescription("The member to look up (optional, defaults to yourself)")
+            .setRequired(false)
+    );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-    const discordTag = interaction.user.tag
+    const targetUser = interaction.options.getUser("member");
+    const discordTag = targetUser?.tag ?? interaction.user.tag;
     
     try {
         const response = await fetch(

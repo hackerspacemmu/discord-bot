@@ -6,9 +6,16 @@ import { dateMod } from "utils/ModifyDate.js"
 export const data = new SlashCommandBuilder()
     .setName("my-last-project")
     .setDescription("Get your latest project created!")
+    .addUserOption(option =>
+        option
+            .setName("member")
+            .setDescription("The member to look up (optional, defaults to yourself)")
+            .setRequired(false)
+    );
 
 export async function execute(interaction: ChatInputCommandInteraction) {
-    const discordTag = interaction.user.tag
+    const targetUser = interaction.options.getUser("member");
+    const discordTag = targetUser?.tag ?? interaction.user.tag;
     
     try {
         const response = await fetch(
