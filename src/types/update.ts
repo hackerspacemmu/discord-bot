@@ -1,3 +1,4 @@
+import { Member } from "./member.js";
 import { Project } from "./project.js";
 
 export interface Update {
@@ -10,4 +11,5 @@ export interface Update {
     "created_at": string,
     "updated_at": string,
     "project"?: Project
+    "member"?: Member
 }
