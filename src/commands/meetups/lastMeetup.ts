@@ -1,7 +1,6 @@
 import { backendUrl } from "config/env.js";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { MeetupCommand } from "types/meetupv2.js";
-import { Stats } from "types/stats.js";
 
 export const data = new SlashCommandBuilder()
     .setName("last-meetup")
