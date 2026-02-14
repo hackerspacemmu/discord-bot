@@ -9,6 +9,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { discordBotToken } from '../config/env.js'
 import { checkNewMemberEntry } from 'commands/utility/checkNewMemberEntry.js'
+import { handleTalkEditApprovalButton } from '../handlers/talkEditApprovalHandler.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -50,6 +51,11 @@ function setupEventHandlers() {
     })
 
     client.on(Events.InteractionCreate, async (interaction) => {
+        if (interaction.isButton()) {
+            const handled = await handleTalkEditApprovalButton(interaction)
+            if (handled) return
+        }
+
         if (!interaction.isChatInputCommand()) return
         const command = client.commands.get(interaction.commandName)
 
