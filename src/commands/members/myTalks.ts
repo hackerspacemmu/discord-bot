@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Update } from "types/update.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("my-talks")
+    .setName("show-talks")
     .setDescription("Get your member talks!")
     .addIntegerOption(option =>
         option

@@ -4,7 +4,7 @@ import { MeetupCommand } from "types/meetupv2.js";
 import { Stats } from "types/stats.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("uptime")
+    .setName("show-uptime")
     .setDescription("get the uptime since the first meetup!")
 
 export async function execute(interaction: ChatInputCommandInteraction) {

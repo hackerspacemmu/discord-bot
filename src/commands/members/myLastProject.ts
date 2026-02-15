@@ -4,7 +4,7 @@ import { Project } from "types/project.js"
 import { dateMod } from "utils/ModifyDate.js"
 
 export const data = new SlashCommandBuilder()
-    .setName("my-last-project")
+    .setName("show-last-project")
     .setDescription("Get your latest project created!")
     .addUserOption(option =>
         option
