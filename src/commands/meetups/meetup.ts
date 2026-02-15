@@ -3,11 +3,11 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { MeetupCommand } from "types/meetupv2.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("meetup")
+    .setName("show-meetup")
     .setDescription("Get a specific meetup's information!")
     .addIntegerOption(option =>
         option.setName('number')
-            .setDescription('The number of the meetup')
+            .setDescription('The number of the meetup (pass a number from 1 to 10 to show more meetups)')
             .setRequired(true)
     )
 	.addStringOption((option) =>

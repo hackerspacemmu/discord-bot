@@ -10,8 +10,8 @@ interface LastTalk {
 }
 
 export const data = new SlashCommandBuilder()
-    .setName("my-last-talk")
-    .setDescription("Get your latest talk given!")
+    .setName("show-last-talk")
+    .setDescription("Shows the description of your last talk!")
     .addUserOption(option =>
         option
             .setName("member")

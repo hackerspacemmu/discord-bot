@@ -3,7 +3,7 @@ import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { Stats } from "types/stats.js";
 
 export const data = new SlashCommandBuilder()
-    .setName("my-stats")
+    .setName("show-stats")
     .setDescription("Get your member statistics!")
     .addUserOption(option =>
         option
