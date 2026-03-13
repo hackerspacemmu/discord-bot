@@ -5,6 +5,8 @@ export const data = new SlashCommandBuilder()
     .setDescription("Replies with a list of commands!")
 
 export async function execute(interaction: any) {
+    await interaction.deferReply()
+
     // create embed with title "Help" and description "Here is a list of commands:"
     const embed = new EmbedBuilder()
         .setColor(0x0099ff)
@@ -23,5 +25,5 @@ export async function execute(interaction: any) {
             { name: "/show-uptime", value: "Shows the uptime since the first meetup." },
             { name: "/search-meetup-by-date", value: "Search for a meetup by its date! It returns the 3 most recent meetups before and after that date." },
         )
-    await interaction.reply({ embeds: [embed] })
+    await interaction.editReply({ embeds: [embed] })
 }

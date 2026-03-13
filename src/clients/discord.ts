@@ -3,13 +3,14 @@ import {
     Collection,
     Events, 
     GatewayIntentBits,
+    MessageFlags,
 } from 'discord.js'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { discordBotToken } from '../config/env.js'
-import { checkNewMemberEntry } from 'commands/utility/checkNewMemberEntry.js'
 import { handleTalkEditApprovalButton } from '../handlers/talkEditApprovalHandler.js'
+import { checkNewMemberEntry } from '../handlers/checkNewMemberEntry.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -67,11 +68,22 @@ function setupEventHandlers() {
         try {
             await command.execute(interaction)
         } catch (error) {
-            console.error(`Error executing ${interaction.commandName}`)
-            await interaction.reply({ 
-                content: 'There was an error while executing this command!', 
-                ephemeral: true 
-            })
+            console.error(`Error executing ${interaction.commandName}`, error)
+
+            try {
+                if (interaction.deferred || interaction.replied) {
+                    await interaction.editReply({
+                        content: 'There was an error while executing this command!',
+                    })
+                } else {
+                    await interaction.reply({
+                        content: 'There was an error while executing this command!',
+                        flags: MessageFlags.Ephemeral,
+                    })
+                }
+            } catch (replyError) {
+                console.error('Failed to send interaction error response:', replyError)
+            }
         }
     })
 

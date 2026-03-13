@@ -20,10 +20,12 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     try {
+        await interaction.deferReply()
+
         const date = interaction.options.getString('date');
 
         if(!isCorrectDateFormat(date)) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `Invalid date format. Please provide the date in YYYY-MM-DD format.`,
             });
             return;
@@ -36,13 +38,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const data: SearchMeetupByDateResponse = (await response.json());
 
         if (!response.ok || !data) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `Could not find any meetups around the date ${convertDateToReadableDate(date!!)}.`,
             });
             return;
         }
 
-        await interaction.reply({
+        await interaction.editReply({
             content: 
             `__**Meetups Around ${convertDateToReadableDate(date!!)}**__\n` +
 
@@ -62,8 +64,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     } catch(error: any) {
         console.error('Error fetching meetups by date:', error)
-        
-        await interaction.reply({
+
+        await interaction.editReply({
             content: `There was an error while fetching the meetups around the given date. Please try again later.`,
         })
     }

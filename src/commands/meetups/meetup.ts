@@ -23,11 +23,13 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: ChatInputCommandInteraction) {
     try {
+        await interaction.deferReply()
+
         const meetupNumber = interaction.options.getInteger('number');
         const category = interaction.options.getString('category')
 
         if (category !== '0' && category !== '1') {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `Invalid category provided. Please choose either Regular Meetup or Hackathon.`,
             });
             return;
@@ -40,13 +42,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const data: MeetupCommand = (await response.json()).meetup;
 
         if (!response.ok || !data) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `Could not find statistics for meetup number ${meetupNumber}. Are you sure it exists?`,
             });
             return;
         }
 
-        await interaction.reply({
+        await interaction.editReply({
             content: 
             `__**Meetup Number ${meetupNumber} Information**__\n` +
             `• Date: ${data.date}\n` +
@@ -62,7 +64,14 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     } catch(error: any) {
         console.error('Error fetching meetup number stats:', error)
-        
+
+        if (interaction.deferred || interaction.replied) {
+            await interaction.editReply({
+                content: `There was an error while fetching the statistics for the given meetup number. Please try again later.`,
+            })
+            return
+        }
+
         await interaction.reply({
             content: `There was an error while fetching the statistics for the given meetup number. Please try again later.`,
         })

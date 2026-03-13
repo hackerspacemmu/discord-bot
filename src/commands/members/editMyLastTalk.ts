@@ -7,6 +7,7 @@ import {
     ButtonBuilder,
     ButtonStyle,
     TextChannel,
+    MessageFlags,
 } from "discord.js"
 import { Meetup } from "types/meetup.js"
 import { Update } from "types/update.js"
@@ -37,14 +38,15 @@ export async function execute(interaction: ChatInputCommandInteraction) {
     const proposedText = interaction.options.getString("proposed_text", true)
 
     try {
+        await interaction.deferReply({ flags: MessageFlags.Ephemeral })
+
         const response = await fetch(
             `${backendUrl}/api/v1/discord/fetch-last-update?discord_tag=${encodeURIComponent(discordTag)}`
         )
 
         if (!response.ok) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `Could not find any talks for @${discordTag}.`,
-                ephemeral: true,
             })
             return
         }
@@ -52,9 +54,8 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const data: LastTalk = await response.json()
 
         if (!data.meetup || data.updates.length === 0) {
-            await interaction.reply({
+            await interaction.editReply({
                 content: `No talk data found for @${discordTag}.`,
-                ephemeral: true,
             })
             return
         }
@@ -102,24 +103,30 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const adminChannel = interaction.client.channels.cache.get(adminChannelId) as TextChannel
         if (!adminChannel) {
             pendingTalkEdits.delete(cacheKey)
-            await interaction.reply({
+            await interaction.editReply({
                 content: "Admin channel is not configured. Please contact a server administrator.",
-                ephemeral: true,
             })
             return
         }
 
         await adminChannel.send({ embeds: [embed], components: [row] })
 
-        await interaction.reply({
+        await interaction.editReply({
             content: "Your edit request has been sent to the admins for approval. You will be notified via DM once a decision is made.",
-            ephemeral: true,
         })
     } catch (error: any) {
         console.error("Error requesting talk edit:", error)
+
+        if (interaction.deferred || interaction.replied) {
+            await interaction.editReply({
+                content: "There was an error while processing your request. Please try again later.",
+            })
+            return
+        }
+
         await interaction.reply({
             content: "There was an error while processing your request. Please try again later.",
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         })
     }
 }
