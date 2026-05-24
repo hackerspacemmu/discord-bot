@@ -1,4 +1,4 @@
-import { backendUrl, adminChannelId } from "config/env.js"
+import { backendUrl, botChannelId } from "config/env.js"
 import {
     SlashCommandBuilder,
     ChatInputCommandInteraction,
@@ -100,16 +100,16 @@ export async function execute(interaction: ChatInputCommandInteraction) {
                 .setStyle(ButtonStyle.Danger)
         )
 
-        const adminChannel = interaction.client.channels.cache.get(adminChannelId) as TextChannel
-        if (!adminChannel) {
+        const botChannel = interaction.client.channels.cache.get(botChannelId) as TextChannel
+        if (!botChannel) {
             pendingTalkEdits.delete(cacheKey)
             await interaction.editReply({
-                content: "Admin channel is not configured. Please contact a server administrator.",
+                content: "Bot channel is not configured. Please contact a server administrator.",
             })
             return
         }
 
-        await adminChannel.send({ embeds: [embed], components: [row] })
+        await botChannel.send({ embeds: [embed], components: [row] })
 
         await interaction.editReply({
             content: "Your edit request has been sent to the admins for approval. You will be notified via DM once a decision is made.",

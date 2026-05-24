@@ -8,7 +8,7 @@ import {
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { discordBotToken } from '../config/env.js'
+import { discordBotToken, botChannelId } from '../config/env.js'
 import { handleTalkEditApprovalButton } from 'handlers/talkEditApprovalHandler.js'
 import { checkNewMemberEntry } from 'handlers/checkNewMemberEntry.js'
 
@@ -52,6 +52,16 @@ function setupEventHandlers() {
     })
 
     client.on(Events.InteractionCreate, async (interaction) => {
+        if (interaction.channelId !== botChannelId) {
+            if (interaction.isChatInputCommand()) {
+                await interaction.reply({
+                    content: `Please use bot commands in <#${botChannelId}>.`,
+                    flags: MessageFlags.Ephemeral,
+                })
+            }
+            return
+        }
+
         if (interaction.isButton()) {
             const handled = await handleTalkEditApprovalButton(interaction)
             if (handled) return
