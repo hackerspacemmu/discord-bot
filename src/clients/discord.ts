@@ -52,7 +52,15 @@ function setupEventHandlers() {
     })
 
     client.on(Events.InteractionCreate, async (interaction) => {
-        if (interaction.channelId !== botChannelId) return
+        if (interaction.channelId !== botChannelId) {
+            if (interaction.isChatInputCommand()) {
+                await interaction.reply({
+                    content: `Please use bot commands in <#${botChannelId}>.`,
+                    flags: MessageFlags.Ephemeral,
+                })
+            }
+            return
+        }
 
         if (interaction.isButton()) {
             const handled = await handleTalkEditApprovalButton(interaction)
