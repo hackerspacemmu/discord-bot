@@ -9,8 +9,8 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { discordBotToken } from '../config/env.js'
-import { handleTalkEditApprovalButton } from '../handlers/talkEditApprovalHandler.js'
-import { checkNewMemberEntry } from '../handlers/checkNewMemberEntry.js'
+import { handleTalkEditApprovalButton } from 'handlers/talkEditApprovalHandler.js'
+import { checkNewMemberEntry } from 'handlers/checkNewMemberEntry.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)

@@ -54,7 +54,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             `• Date: ${data.date}\n` +
             `• Number: ${data.category === 'hackathon' ? data.hackathon_number : data.number}\n` +
             `• Category: ${data.category}\n` +
-            `• Host: ${data.host.name}\n` +
+            `• Host: ${data?.host?.name || 'Unknown'}\n` +
             `• Number of Updates: ${data.updates.length}\n` +
             `\n**Updates:**\n` +
             data.updates.map((update, index) => 
@@ -64,6 +64,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     } catch(error: any) {
         console.error('Error fetching meetup number stats:', error)
+
+        if(error.code === 50035 || error.code === '50035') {
+            await interaction.editReply({
+                content: `The number of the total words is too long to display in the message. You should view this on the website instead. \nhttps://hacktrackmmuv2.vercel.app`,
+            })
+            return
+        }
 
         if (interaction.deferred || interaction.replied) {
             await interaction.editReply({

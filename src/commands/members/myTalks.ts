@@ -8,9 +8,9 @@ export const data = new SlashCommandBuilder()
     .addIntegerOption(option =>
         option
             .setName("talks")
-            .setDescription("Choose from 1 to 10 talks to display")
+            .setDescription("Choose from 1 to 7 talks to display")
             .setMinValue(1)
-            .setMaxValue(10)
+            .setMaxValue(7)
             .setRequired(true)
     )
     .addUserOption(option =>
@@ -48,6 +48,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
 
     } catch(error: any) {
         console.error('Error fetching member talks:', error)
+
+        if(error.code === 50035 || error.code === '50035') {
+            await interaction.editReply({
+                content: `The number of the total words is too long to display in the message. Please try showing fewer talks (choose a number from 1 to 5).`,
+            })
+            return
+        }
 
         if (interaction.deferred || interaction.replied) {
             await interaction.editReply({
