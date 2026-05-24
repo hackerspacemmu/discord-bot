@@ -10,7 +10,13 @@
     "skipLibCheck": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "commands/*": ["commands/*"],
+      "config/*": ["config/*"],
+      "types/*": ["types/*"],
+      "utils/*": ["utils/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
