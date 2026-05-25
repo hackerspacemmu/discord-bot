@@ -49,9 +49,6 @@ async function loadCommands() {
 function setupEventHandlers() {
     client.once(Events.ClientReady, (readyClient) => {
         console.log(`Ready! Logged in as ${readyClient.user.tag}`)
-
-        const channel = readyClient.channels.cache.get('712359348525072462');
-        console.log(channel.permissionsFor(readyClient.user).toArray());
     })
 
     client.on(Events.InteractionCreate, async (interaction) => {
