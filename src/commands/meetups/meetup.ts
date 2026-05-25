@@ -1,6 +1,7 @@
 import { backendUrl } from "config/env.js";
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { MeetupCommand } from "types/meetupv2.js";
+import { paginateMeetupUpdates } from "utils/paginateMeetupUpdates.js";
 
 export const data = new SlashCommandBuilder()
     .setName("show-meetup")
@@ -48,29 +49,10 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             return;
         }
 
-        await interaction.editReply({
-            content: 
-            `__**Meetup Number ${meetupNumber} Information**__\n` +
-            `• Date: ${data.date}\n` +
-            `• Number: ${data.category === 'hackathon' ? data.hackathon_number : data.number}\n` +
-            `• Category: ${data.category}\n` +
-            `• Host: ${data?.host?.name || 'Unknown'}\n` +
-            `• Number of Updates: ${data.updates.length}\n` +
-            `\n**Updates:**\n` +
-            data.updates.map((update, index) => 
-                `${index + 1}. [${update.category}] ${update.description.replace(/\s+/g, ' ').trim()} (by ${update.member ? update.member.name : 'Unknown'})`
-            ).join('\n')
-        })
+        await paginateMeetupUpdates(interaction, data, `Meetup Number ${meetupNumber} Information`);
 
     } catch(error: any) {
         console.error('Error fetching meetup number stats:', error)
-
-        if(error.code === 50035 || error.code === '50035') {
-            await interaction.editReply({
-                content: `The number of the total words is too long to display in the message. You should view this on the website instead. \nhttps://hacktrackmmuv2.vercel.app`,
-            })
-            return
-        }
 
         if (interaction.deferred || interaction.replied) {
             await interaction.editReply({
