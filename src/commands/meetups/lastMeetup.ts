@@ -33,7 +33,7 @@ export async function execute(interaction: ChatInputCommandInteraction) {
             `• Number of Updates: ${data.updates.length}\n` +
             `\n**Updates:**\n` +
             data.updates.map((update, index) => 
-                `${index + 1}. [${update.category}] ${update.description} (by ${update.member ? update.member.name : 'Unknown'})`
+                `${index + 1}. [${update.category}] ${update.description.replace(/\s+/g, ' ').trim()} (by ${update.member ? update.member.name : 'Unknown'})`
             ).join('\n')
         })
 
