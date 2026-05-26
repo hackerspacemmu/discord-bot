@@ -11,6 +11,7 @@ import {
 } from "discord.js"
 import { Meetup } from "types/meetup.js"
 import { Update } from "types/update.js"
+import { convertDateToReadableDate } from "utils/ConvertDatetoReadableDate.js"
 
 interface LastTalk {
     meetup: Meetup
@@ -73,7 +74,13 @@ export async function execute(interaction: ChatInputCommandInteraction) {
         const embed = new EmbedBuilder()
             .setColor(0xffaa00) // Yellow/amber for pending
             .setTitle("Talk Edit Approval Request")
-            .setDescription(`**Requested by:** ${interaction.user.tag} (${interaction.user.id})`)
+            .setDescription(`
+                **Requested by:** ${interaction.user.tag}\n
+                **Meetup Info:**
+                Date: ${convertDateToReadableDate(data.meetup.date)}
+                Number: ${data.meetup.category === "hackathon" ? data.meetup.hackathon_number : data.meetup.number}
+                Category: ${data.meetup.category}\n
+            `)
             .addFields(
                 {
                     name: "Current Description",
