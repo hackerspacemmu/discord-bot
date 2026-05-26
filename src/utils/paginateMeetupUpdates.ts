@@ -16,7 +16,7 @@ function buildEmbed(data: MeetupCommand, title: string, page: number, totalPages
 
     const updatesText = pageUpdates
         .map((update, i) =>
-            `${start + i + 1}. [${update.category}] ${update.description.replace(/\s+/g, ' ').trim()} (by ${update.member?.name ?? 'Unknown'})`
+            `${start + i + 1}. [${update.category}] ${update.member?.name ?? 'Unknown'} (${update.project?.name}): ${update.description.replace(/\s+/g, ' ').trim()} `
         )
         .join('\n');
 
